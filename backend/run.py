@@ -76,11 +76,14 @@ app.add_url_rule('/api/', view_func=welcomes__welcome, methods=['GET'], endpoint
 #===============================================================================
 # BLUEPRINT
 #===============================================================================
-from backend.blueprints.admin.restapis.sales.order_items import (
-    admin_api_sales_order_item as bp_admin_api_sales_order_item)
-
-app.register_blueprint(bp_admin_api_sales_order_item, 
-                       url_prefix="/admin/api/sales/")
+def initial_bp(app):
+    from backend.blueprints.admins.restapis.sales.order_items import (
+        admin_api_sales_order_item as bp_admin_api_sales_order_item)
+    
+    app.register_blueprint(bp_admin_api_sales_order_item, 
+                           url_prefix="/admin/api/sales/")
+    
+initial_bp(app)
 
 port = int(os.environ.get('PORT', 8181))
 

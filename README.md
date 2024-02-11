@@ -73,17 +73,20 @@ sudo -H pip3 install virtualenv
 cd backend
 ```
 ```
+cp default.env .env
+```
+```
 python3 manage.py db init
 ```
 ```
 python3 manage.py db migrate
 ```
 ```
-python3 manage.py db upgrate
+python3 manage.py db upgrade
 ```
 ##### 1.4. Test
 ```
-python3 test_manage.py db upgrate
+python3 test_manage.py db upgrade
 ```
 ```
 python3 test_manage.py test

@@ -57,15 +57,16 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def runserver(port=port, debug=True):
-    app.run(threaded=True, debug=True, host='0.0.0.0', port=port)
+    #===========================================================================
+    # BLUEPRINT
+    #===========================================================================
+    from backend.blueprints.admins.restapis.sales.order_items import (
+        admin_api_sales_order_item as bp_admin_api_sales_order_item)
     
-@manager.command
-def test():
-    """Runs the tests."""
-    pytest.main(["-v", 
-                 os.path.join(
-                     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                     "backend","tests")])
+    app.register_blueprint(bp_admin_api_sales_order_item, 
+                           url_prefix="/admin/api/sales/")
+    
+    app.run(threaded=True, debug=True, host='0.0.0.0', port=port)
     
 from backend.apps.commands.displays import get_logger
 # /home/<username>/venvbackend/bin/python3 manage.py logger --msg='hallo hallo bandong'
