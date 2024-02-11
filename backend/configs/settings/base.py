@@ -25,7 +25,7 @@ SECRET_KEY = config.get('FLASK_SECRET_KEY',
 
 
 SQLALCHEMY_DATABASE_URI = config.get("DATABASE_URL", 
-    "postgres://uflaskvuepf:PwDflaskvuepfSatu1Dua3@127.0.0.1/db_flaskvuepf")
+    "postgres://ufvpackform:PwDfvpackformSatu1Dua3@127.0.0.1/db_fvpackform")
 
 SQLALCHEMY_TRACK_MODIFICATIONS = config.get("SQLALCHEMY_TRACK_MODIFICATIONS", False)
 

@@ -7,29 +7,27 @@
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 
-sudo -u postgres psql -c "CREATE USER uflaskvuepf WITH ENCRYPTED PASSWORD 'PwDflaskvuepfSatu1Dua3';"
-sudo -u postgres psql -c "CREATE DATABASE db_flaskvuepf;"
+sudo -u postgres psql -c "CREATE USER ufvpackform WITH ENCRYPTED PASSWORD 'PwDfvpackformSatu1Dua3';"
+sudo -u postgres psql -c "CREATE USER ufvpackformtest WITH ENCRYPTED PASSWORD 'PwDfvpackformtestSatu1Dua3';"
+
+sudo -u postgres psql -c "CREATE DATABASE db_fvpackform;"
+sudo -u postgres psql db_fvpackform -c "GRANT ALL PRIVILEGES ON DATABASE db_fvpackform TO ufvpackform;"
+sudo -u postgres psql db_fvpackform -c "GRANT ALL ON SCHEMA public TO ufvpackform;"
+sudo -u postgres psql db_fvpackform -c "GRANT ALL ON ALL TABLES IN SCHEMA public to ufvpackform;"
+sudo -u postgres psql db_fvpackform -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public to ufvpackform;"
+sudo -u postgres psql db_fvpackform -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public to ufvpackform;"
 
 
-sudo -u postgres psql db_flaskvuepf -c "GRANT ALL PRIVILEGES ON DATABASE db_flaskvuepf TO uflaskvuepf;"
-sudo -u postgres psql db_flaskvuepf -c "GRANT ALL ON SCHEMA public TO uflaskvuepf;"
-sudo -u postgres psql db_flaskvuepf -c "GRANT ALL ON ALL TABLES IN SCHEMA public to uflaskvuepf;"
-sudo -u postgres psql db_flaskvuepf -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public to uflaskvuepf;"
-sudo -u postgres psql db_flaskvuepf -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public to uflaskvuepf;"
-
-sudo -u postgres psql -c "CREATE USER uflaskvuepftest WITH ENCRYPTED PASSWORD 'PwDflaskvuepftestSatu1Dua3';"
-sudo -u postgres psql -c "CREATE DATABASE db_flaskvuepftest;"
-
-
-sudo -u postgres psql db_flaskvuepftest -c "GRANT ALL PRIVILEGES ON DATABASE db_flaskvuepftest TO uflaskvuepftest;"
-sudo -u postgres psql db_flaskvuepftest -c "GRANT ALL ON SCHEMA public TO uflaskvuepftest;"
-sudo -u postgres psql db_flaskvuepftest -c "GRANT ALL ON ALL TABLES IN SCHEMA public to uflaskvuepftest;"
-sudo -u postgres psql db_flaskvuepftest -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public to uflaskvuepftest;"
-sudo -u postgres psql db_flaskvuepftest -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public to uflaskvuepftest;"
+sudo -u postgres psql -c "CREATE DATABASE db_fvpackformtest;"
+sudo -u postgres psql db_fvpackformtest -c "GRANT ALL PRIVILEGES ON DATABASE db_fvpackformtest TO ufvpackformtest;"
+sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON SCHEMA public TO ufvpackformtest;"
+sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON ALL TABLES IN SCHEMA public to ufvpackformtest;"
+sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON ALL SEQUENCES IN SCHEMA public to ufvpackformtest;"
+sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public to ufvpackformtest;"
 
 IF need drop db
-sudo -u postgres psql -c "DROP DATABASE db_flaskvuepf;"
-sudo -u postgres psql -c "DROP USER IF EXISTS uflaskvuepf;"
+sudo -u postgres psql -c "DROP DATABASE db_fvpackform;"
+sudo -u postgres psql -c "DROP USER IF EXISTS ufvpackform;"
 
 2.1. SYSTEM FLASK ENVIRONMENT
 -------------------------------------------------------------------------------
@@ -42,23 +40,22 @@ sudo apt install pip
 
 python3 -m pip install --user pipenv
 
-git clone https://github.com/herbew/flaskvuepf.git
+git clone https://github.com/herbew/fvpackform.git
 
 
 IF PRODUCTION
 --
-	ln -s /root/flaskvuepf/backend /opt/flaskvuepf/backend 
-	cd /opt/flaskvuepf/
+	ln -s /root/fvpackform/backend /opt/fvpackform/backend 
+	cd /opt/fvpackform/
 
 ELSE
 --
-	cd /home/<username>/flaskvuepf/
+	cd /home/<username>/fvpackform/
 
 python3 -m venv venvbackend
 source venvbackend/bin/activate
 
 sudo apt install dos2unix -y 
-cd flaskvuepf/backend
 
 dos2unix backend/utilities/install_os_dependencies.sh
 dos2unix backend/utilities/install_python_dependencies.sh
@@ -66,12 +63,12 @@ sudo ./backend/utilities/install_os_dependencies.sh install
 
 IF PRODUCTION
 --
-	source /opt/flaskvuepf/venvbackend/bin/activate
-	cd /opt/flaskvuepf/backend 
+	source /opt/fvpackform/venvbackend/bin/activate
+	cd /opt/fvpackform/backend 
 ELSE
 --
-	source /home/<username>/flaskvuepf/venvbackend/bin/activate
-	cd /home/<username>/flaskvuepf/backend 
+	source /home/<username>/fvpackform/venvbackend/bin/activate
+	cd /home/<username>/fvpackform/backend 
 
 sudo -H pip3 install virtualenv
 ./backend/utilities/install_python_dependencies.sh install
@@ -143,8 +140,8 @@ gunicorn --bind 0.0.0.0:8080 wsgi:app
 sudo vi /etc/systemd/system/gunicorn.service
 
 # Assume the user 'herbew'
-# Assume the project directory '/home/herbew/flaskvuepf/backend'
-# Assume the environment project directory '/home/herbew/flaskvuepf/venvbackend/bin'
+# Assume the project directory '/home/herbew/fvpackform/backend'
+# Assume the environment project directory '/home/herbew/fvpackform/venvbackend/bin'
 
 -------------------------------------------------------------------------------
 [Unit]
@@ -154,9 +151,9 @@ After=network.target
 [Service]
 User=herbew
 Group=www-data
-WorkingDirectory=/home/herbew/flaskvuepf/backend
-Environment="PATH=/home/herbew/flaskvuepf/venvbackend/bin"
-ExecStart=/home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
+WorkingDirectory=/home/herbew/fvpackform/backend
+Environment="PATH=/home/herbew/fvpackform/venvbackend/bin"
+ExecStart=/home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target
@@ -180,10 +177,10 @@ sudo systemctl status gunicorn
      Memory: 60.0M
         CPU: 273ms
      CGroup: /system.slice/gunicorn.service
-             ├─1776 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
-             ├─1777 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
-             ├─1778 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
-             └─1779 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
+             ├─1776 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
+             ├─1777 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
+             ├─1778 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
+             └─1779 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m>
 
 Jun 26 03:55:07 fub2204 systemd[1]: Started Gunicorn instance to serve messaging.
 Jun 26 03:55:07 fub2204 gunicorn[1776]: [2023-06-26 03:55:07 +0000] [1776] [INFO] Starting gunicorn 20.1.0
@@ -199,10 +196,10 @@ ps ax |grep py
 --
 648 ?        Ss     0:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
 708 ?        Ssl    0:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
-1776 ?        Ss     0:00 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
-1777 ?        S      0:00 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
-1778 ?        S      0:00 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
-1779 ?        S      0:00 /home/herbew/flaskvuepf/venvbackend/bin/python3 /home/herbew/flaskvuepf/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
+1776 ?        Ss     0:00 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
+1777 ?        S      0:00 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
+1778 ?        S      0:00 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
+1779 ?        S      0:00 /home/herbew/fvpackform/venvbackend/bin/python3 /home/herbew/fvpackform/venvbackend/bin/gunicorn --access-logfile - --workers 3 --bind unix:flask.sock -m 007 wsgi:app
 1859 pts/0    S+     0:00 grep --color=auto py
 --
 	
@@ -212,8 +209,8 @@ ps ax |grep py
 
 sudo apt install nginx
 
-sudo cp -f /home/herbew/flaskvuepf/backend/configs/nginx/local-nginx.conf /etc/nginx/sites-available/flaskvuepf/backend
-sudo ln -s /etc/nginx/sites-available/flaskvuepf/backend /etc/nginx/sites-enabled
+sudo cp -f /home/herbew/fvpackform/backend/configs/nginx/local-nginx.conf /etc/nginx/sites-available/fvpackform/backend
+sudo ln -s /etc/nginx/sites-available/fvpackform/backend /etc/nginx/sites-enabled
 
 sudo nginx -t
 
@@ -257,8 +254,8 @@ include /etc/nginx/modules-enabled/*.conf;
 
 5. FLASK CONFIGURATION
 --
-# Assume the project directory '/home/herbew/flaskvuepf/backend'
-cp -f /home/herbew/flaskvuepf/backend/default.env /home/herbew/flaskvuepf/backend/.env
+# Assume the project directory '/home/herbew/fvpackform/backend'
+cp -f /home/herbew/fvpackform/backend/default.env /home/herbew/fvpackform/backend/.env
 
 
 
