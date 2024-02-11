@@ -1,0 +1,46 @@
+# Flask
+Flask==3.0.2
+
+# Flask shell
+Flask-WTF==1.2.1
+markupsafe==2.1.5
+
+# CORS
+flask-cors==4.0.0
+
+# .env Configuration file
+python-dotenv==1.0.1
+
+# Postgres
+Psycopg2==2.9.9
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+# Seriallizer
+# https://github.com/n0nSmoker/SQLAlchemy-serializer/blob/master/README.md
+SQLAlchemy-serializer==1.4.1
+
+# Pytest 
+pytest==8.0.0
+
+# Time Zone
+pytz==2024.1
+
+# Pandas
+pandas==2.2.0
+
+# RestAPI
+# https://flask-rest-api.readthedocs.io
+# flask-rest-api==0.17.1 has overwrite to backend.libs flask_rest_api
+# For backend.libs.flask_rest_api
+webargs==8.4.0 
+apispec==6.4.0
+
+
+
+
+
+
+
+
+
+
