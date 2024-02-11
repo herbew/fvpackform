@@ -1,15 +1,15 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <PackFormSalesOrder msg="Welcome to PackForm Sales Order App" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import PackFormSalesOrder from "./components/PackFormSalesOrder.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    PackFormSalesOrder,
   },
 };
 </script>

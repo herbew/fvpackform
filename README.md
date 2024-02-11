@@ -114,6 +114,13 @@ npm install -g @vue/cli
 ```
 cd ../frontend
 ```
+```
+npm run serve
+```
+### IF Any Error
+```
+npm i @vue/cli-service
+```
 
 
 
