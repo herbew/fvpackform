@@ -32,30 +32,45 @@ sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA
 ##### 1.2. Install Environment
 ```
 sudo apt install language-pack-id
+```
+```
 sudo dpkg-reconfigure locales
+```
+```
 sudo apt install -y python3-venv 
 sudo apt install pip
 sudo apt install dos2unix -y 
-
+```
+```
 python3 -m pip install --user pipenv
+```
+```
 git clone https://github.com/herbew/fvpackform.git
-
+```
+```
 cd ../fvpackform/
 python3 -m venv venvbackend
+```
+```
 dos2unix backend/utilities/install_os_dependencies.sh
 dos2unix backend/utilities/install_python_dependencies.sh
-
+```
+```
 sudo ./backend/utilities/install_os_dependencies.sh install
 ```
 ##### 1.3. Install Application
 ```
 source venvbackend/bin/activate
 sudo -H pip3 install virtualenv
+```
+```
 ./backend/utilities/install_python_dependencies.sh install
 ```
 ##### 1.3.1. migrations database
 ```
 cd backend
+```
+```
 python3 manage.py db init
 python3 manage.py db migrate
 python3 manage.py db upgrate
@@ -63,11 +78,15 @@ python3 manage.py db upgrate
 ##### 1.4. Test
 ```
 python3 test_manage.py db upgrate
+```
+```
 python3 test_manage.py test
 ```
 ##### 1.5. Running Service
 ```
 python3 manage.py db_populate
+```
+```
 python3 manage.py runserver
 ```
 
