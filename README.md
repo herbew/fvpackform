@@ -48,7 +48,7 @@ python3 -m pip install --user pipenv
 git clone https://github.com/herbew/fvpackform.git
 ```
 ```
-cd ../fvpackform/
+cd fvpackform
 python3 -m venv venvbackend
 ```
 ```
