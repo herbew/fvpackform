@@ -61,6 +61,8 @@ sudo ./backend/utilities/install_os_dependencies.sh install
 ##### 1.3. Install Application
 ```
 source venvbackend/bin/activate
+```
+```
 sudo -H pip3 install virtualenv
 ```
 ```
@@ -72,7 +74,11 @@ cd backend
 ```
 ```
 python3 manage.py db init
+```
+```
 python3 manage.py db migrate
+```
+```
 python3 manage.py db upgrate
 ```
 ##### 1.4. Test
