@@ -100,3 +100,29 @@ python3 manage.py runserver
 ```
 
 ### 2. Frontend
+#### 2.1. Install Node.js
+'''
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+source ~/.bashrc
+nvm install v20.11.0
+'''
+#### 2.2. Install Vue
+'''
+npm install -g @vue/cli
+'''
+#### 2.3. Run Service
+'''
+cd ../frontend
+'''
+
+
+
+
+
+
+
+
+
+
+
+
