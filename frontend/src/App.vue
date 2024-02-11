@@ -1,15 +1,23 @@
+new = Vue({el: '#app', data (){return {info:null}}}, mounted ({axios
+.get('https://api.coindesk.com/v1/bpi/currentprice.json').then(response =>
+(this.info = response))}))
 <template>
+  <!--
   <img alt="Vue logo" src="./assets/logo.png" />
-  <PackFormSalesOrder msg="Welcome to PackForm Sales Order App" />
+  -->
+  <PackFormSalesOrderMessage msg="Welcome to PackForm Sales Order App" />
+  <PackFormSalesOrderApi info="{{}}" />
 </template>
 
 <script>
-import PackFormSalesOrder from "./components/PackFormSalesOrder.vue";
+import PackFormSalesOrderMessage from "./components/PackFormSalesOrder.vue";
+import PackFormSalesOrderApi from "./components/PackFormSalesOrder.vue";
 
 export default {
   name: "App",
   components: {
-    PackFormSalesOrder,
+    PackFormSalesOrderMessage,
+    PackFormSalesOrderApi,
   },
 };
 </script>
