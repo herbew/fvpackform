@@ -56,8 +56,8 @@ class Customer(db.Model, SerializerMixin):
     credit_cards = db.Column(db.String(80), nullable=True)
     
     # Tracer fields
-    created = db.Column(db.DateTime(), nullable=False, default=datetime.now())
-    updated = db.Column(db.DateTime(), nullable=False, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
     user_updated = db.Column(db.String(30),  default="Admin")
     
     # Relationships 

@@ -36,15 +36,15 @@ class Order(db.Model, SerializerMixin):
     serialize_rules = ('-order_items.sales_order',)
     
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime(), nullable=False, default=datetime.now())
+    created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
     order_name = db.Column(db.String(255), nullable=False, unique=True)
     
     customer_id = db.Column(db.String(80), 
                     db.ForeignKey("masters_customer.user_id", ondelete='RESTRICT'))
     
     # Tracer fields
-    created = db.Column(db.DateTime(), nullable=False, default=datetime.now())
-    updated = db.Column(db.DateTime(), nullable=False, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
     user_updated = db.Column(db.String(30),  default="Admin")
     
     # Relationships 
