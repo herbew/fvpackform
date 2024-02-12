@@ -1,9 +1,11 @@
 from __future__ import unicode_literals, absolute_import
 
+import pytz
+
 from datetime import datetime
 
 import pandas as pd
-from backend.tests.run_test import os, app, db, pytz
+from backend.tests.run_test import os, app, db 
 
 from backend.apps.masters.models.companies import Company
 from backend.apps.masters.models.customers import Customer
