@@ -93,7 +93,7 @@ class TestCustomer(BaseTestCase):
                 user_id=data['user_id'])).scalar_one()
                 
             if customer.password is None:
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 customer.set_password(data['password'])
                 customer.updated = ts_updated
                 db.session.commit()
@@ -134,7 +134,7 @@ class TestCustomer(BaseTestCase):
                 db.select(Customer).filter_by(
                 user_id=data['user_id'])).scalar_one()
             
-            ts_updated = datetime.now()
+            ts_updated = datetime.utcnow()
             
             customer.name = "{} UPDATED".format(data['name'])
             customer.updated = ts_updated

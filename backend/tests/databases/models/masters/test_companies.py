@@ -48,7 +48,7 @@ class TestCompany(BaseTestCase):
                     db.select(Company).filter_by(
                     name=self.company_data['name'][0])).scalar_one()
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 company.name = self.company_data['name'][1]
                 company.updated = ts_updated

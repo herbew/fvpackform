@@ -163,7 +163,7 @@ class TestOrderItem(BaseTestCase):
             old_order_item_id = order_item.id
             
             if order_item.id != int(data['order_item_id']):
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 order_item.id = int(data['order_item_id'])
                 order_item.updated = ts_updated
@@ -224,7 +224,7 @@ class TestOrderItem(BaseTestCase):
                     db.select(OrderItem).filter_by(
                     id=int(data['order_item_id']))).scalar_one() 
             
-            ts_updated = datetime.now()
+            ts_updated = datetime.utcnow()
             
             order_item.product = "{} UPDATED".format(data['product'])
             order_item.updated = ts_updated

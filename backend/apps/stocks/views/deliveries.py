@@ -78,7 +78,7 @@ class DeliveryProcess(BaseProcess):
             
             if delivery.id != int(delivery_id):
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 delivery.id = int(delivery_id)
                 delivery.updated = ts_updated

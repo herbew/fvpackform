@@ -62,7 +62,7 @@ class CompanyProcess(BaseProcess):
             
             if company.id != int(company_id):
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 company.id = int(company_id)
                 company.updated = ts_updated

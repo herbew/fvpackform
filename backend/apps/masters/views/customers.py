@@ -76,7 +76,7 @@ class CustomerProcess(BaseProcess):
                     
             if customer.password is None:
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 customer.set_password(password)
                 customer.updated = ts_updated
                 customer.user_updated = "SYSTEM"

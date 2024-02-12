@@ -182,7 +182,7 @@ class TestDelivery(BaseTestCase):
             
             if delivery.id != int(data['delivery_id']):
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 delivery.id = int(data['delivery_id'])
                 delivery.updated = ts_updated
@@ -239,7 +239,7 @@ class TestDelivery(BaseTestCase):
                     db.select(Delivery).filter_by(
                     id=int(data['delivery_id']))).scalar_one() 
             
-            ts_updated = datetime.now()
+            ts_updated = datetime.utcnow()
             
             delivery.delivered_quantity = delivered_quantity
             delivery.updated = ts_updated

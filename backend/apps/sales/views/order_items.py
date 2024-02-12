@@ -95,7 +95,7 @@ class OrderItemProcess(BaseProcess):
             
             if order_item.id != int(order_item_id):
                 
-                ts_updated = datetime.now()
+                ts_updated = datetime.utcnow()
                 
                 order_item.id = int(order_item_id)
                 order_item.updated = ts_updated
