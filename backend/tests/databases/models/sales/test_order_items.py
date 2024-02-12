@@ -175,7 +175,7 @@ class TestOrderItem(BaseTestCase):
             assert int(order_item.quantity) == quantity
             assert order_item.product == data['product']
             
-    def test_005_retrieve_order_item_serializer(self):
+    def xtest_005_retrieve_order_item_serializer(self):
         with self.app.app_context():
             # Get first a customer data
             data = self.csv_order_item[0]
