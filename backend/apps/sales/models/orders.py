@@ -77,7 +77,7 @@ class Order(db.Model, SerializerMixin):
     def created_at_local(self):
         import pytz
         local_string = self.created_at.astimezone(
-            pytz.timezone(os.environ('TZ'))).strftime('%Y-%m-%d %H:%M:%S %Z%z')
+            pytz.timezone(os.environ['TZ'])).strftime('%Y-%m-%d %H:%M:%S %Z%z')
         local_datetime = datetime.strptime(local_string,'%Y-%m-%d %H:%M:%S %Z%z')
         return local_datetime
         
