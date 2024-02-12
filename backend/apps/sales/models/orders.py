@@ -5,7 +5,7 @@ from datetime import datetime
 
 from sqlalchemy_serializer import SerializerMixin
 
-from backend.run import db
+from backend.run import db, os
 
 from backend.logs import FILE_HANDLER
 
@@ -32,19 +32,19 @@ class Order(db.Model, SerializerMixin):
                     'order_name', 'customer_id', 
                     name = 'unique_order_customer'),)
     
-    serialize_only = ('id', 'created_at', 'order_name', 'customer')
+    serialize_only = ('id', 'created_at_local', 'order_name', 'customer')
     serialize_rules = ('-order_items.sales_order',)
     
     id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    created_at = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
     order_name = db.Column(db.String(255), nullable=False, unique=True)
     
     customer_id = db.Column(db.String(80), 
                     db.ForeignKey("masters_customer.user_id", ondelete='RESTRICT'))
     
     # Tracer fields
-    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
-    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
+    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
     user_updated = db.Column(db.String(30),  default="Admin")
     
     # Relationships 
@@ -60,7 +60,7 @@ class Order(db.Model, SerializerMixin):
                 passive_deletes=True,
                 lazy="select"
             )
-
+    
     def __init__(self, 
                  created_at, 
                  order_name, 
@@ -74,6 +74,12 @@ class Order(db.Model, SerializerMixin):
         return '<id: {}, order_name:{} customer_id:{} created_at :{}>'.format(
             self.id, self.order_name, self.customer_id, self.created_at)
     
-    
-
+    def created_at_local(self):
+        import pytz
+        local_string = self.created_at.astimezone(
+            pytz.timezone(os.environ('TZ'))).strftime('%Y-%m-%d %H:%M:%S %Z%z')
+        local_datetime = datetime.strptime(local_string,'%Y-%m-%d %H:%M:%S %Z%z')
+        return local_datetime
+        
+        
 

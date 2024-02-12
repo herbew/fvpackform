@@ -7,7 +7,7 @@ from dotenv import dotenv_values
 # load_dotenv()
 config = dotenv_values(os.path.join(os.path.dirname(os.path.abspath(__file__)),'../../.env'))
 # Local TIMEZONE
-os.environ['TZ'] = config.get("LOCAL_TIMEZONE", "Asia/Jakarta")
+os.environ['TZ'] = config.get("LOCAL_TIMEZONE", "Asia/Jakarta") #datetime.now().astimezone().tzinfo
 time.tzset()
 
 

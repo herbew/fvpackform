@@ -1,11 +1,11 @@
 from __future__ import unicode_literals, absolute_import
 
-import logging
+import logging, pytz
 import pandas as pd
 from datetime import datetime
 
 
-from backend.run import db
+from backend.run import db, os
 from backend.logs import FILE_HANDLER
 
 from backend.apps.masters.models.customers import Customer
@@ -50,9 +50,14 @@ class OrderProcess(BaseProcess):
                     user_id=customer_id)).scalar_one() 
                 
                 # Initial models
+                local_datetime = datetime.strptime(created_at, self.FORMAT_DATETIME)
+                
+                # Convert to UTC
+                utc_string = local_datetime.astimezone(pytz.timezone('UTC')).strftime('%Y-%m-%d %H:%M:%S %Z%z')
+                utc_datetime = datetime.strptime(utc_string,'%Y-%m-%d %H:%M:%S %Z%z')
+                
                 order = self._models(
-                        created_at=datetime.strptime(created_at, 
-                                self.FORMAT_DATETIME),
+                        created_at=utc_datetime,
                         order_name=order_name,
                         customer_id=customer.user_id,
                         )

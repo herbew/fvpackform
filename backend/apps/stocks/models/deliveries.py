@@ -37,8 +37,8 @@ class Delivery(db.Model, SerializerMixin):
     delivered_quantity = db.Column(db.Integer, nullable=False, default=0)
     
     # Tracer fields
-    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
-    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
+    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
     user_updated = db.Column(db.String(30),  default="Admin")
     
     

@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 from datetime import datetime
 
 import pandas as pd
-from backend.tests.run_test import os, app, db
+from backend.tests.run_test import os, app, db, pytz
 
 from backend.apps.masters.models.companies import Company
 from backend.apps.masters.models.customers import Customer
@@ -102,11 +102,18 @@ class TestOrder(BaseTestCase):
                 customer = db.session.execute(
                     db.select(Customer).filter_by(
                     user_id=data['customer_id'])).scalar_one()
-                    
+                
+                
+                # Initial models
+                local_datetime = datetime.strptime(data['created_at'], self.FORMAT_DATETIME)
+                
+                # Convert to UTC
+                utc_string = local_datetime.astimezone(pytz.timezone('UTC')).strftime('%Y-%m-%d %H:%M:%S %Z%z')
+                utc_datetime = datetime.strptime(utc_string,'%Y-%m-%d %H:%M:%S %Z%z')
+                
                 # set Order models
                 order = Order(
-                    created_at=datetime.strptime(data['created_at'], 
-                                    self.FORMAT_DATETIME),
+                    created_at=utc_datetime,
                     order_name=data['order_name'],
                     customer_id=customer.user_id
                     )

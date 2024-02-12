@@ -47,8 +47,8 @@ class OrderItem(db.Model, SerializerMixin):
     product = db.Column(db.String(255), nullable=False)
     
     # Tracer fields
-    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
-    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.now())
+    created = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
+    updated = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow())
     user_updated = db.Column(db.String(30),  default="Admin")
     
     # Relationships 
