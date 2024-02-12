@@ -75,7 +75,7 @@ class OrderItem(db.Model, SerializerMixin):
     
     def balance(self):
          # set by sistem
-        return self.quantity - self.delivered
+        return self.quantity - self.delivered()
 
     def __init__(self, 
                  order_id, 
