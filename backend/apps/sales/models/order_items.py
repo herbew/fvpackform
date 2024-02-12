@@ -35,8 +35,8 @@ class OrderItem(db.Model, SerializerMixin):
                     'product', 'order_id', 
                     name = 'unique_orderitem_order'),)
     
-    serialize_only = ('id', 'price_per_unit', 'quantity', 'product', 'order')
-    serialize_rules = ('-deliveries.sales_orderitem',)
+    serialize_only = ('id', 'price_per_unit', 'quantity', 'product', 'order','delivered', 'balance')
+    serialize_rules = ('-deliveries.sales_orderitem','delivered', 'balance')
     
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, 
@@ -65,6 +65,17 @@ class OrderItem(db.Model, SerializerMixin):
                 lazy="select"
             )
     
+    def delivered(self):
+        from backend.apps.stocks.models.deliveries import Delivery
+        delivered = 0
+        for d in Delivery.query.filter(Delivery.order_item_id==self.id):
+            delivered += int(d.delivered_quantity)
+        
+        return delivered
+    
+    def balance(self):
+         # set by sistem
+        return self.quantity - self.delivered
 
     def __init__(self, 
                  order_id, 
@@ -76,7 +87,7 @@ class OrderItem(db.Model, SerializerMixin):
         self.price_per_unit = price_per_unit
         self.quantity = quantity
         self.product = product
-
+        
     def __repr__(self):
         return '''<id:{}, order_id:{}, price_per_unit:{}, 
             quantity:{}, product:{}>'''.format(

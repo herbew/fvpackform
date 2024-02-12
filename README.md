@@ -99,7 +99,7 @@ python3 manage.py db_populate
 python3 manage.py runserver
 ```
 
-### 2. Frontend
+### 2. Frontend with Vue 3
 #### 2.1. Install Node.js
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
