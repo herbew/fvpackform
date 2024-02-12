@@ -54,7 +54,7 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 # Initialize Data
 db = SQLAlchemy(app)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/admin/api/*": {"origins": "*"}})
 
 
 @app.route('/')
