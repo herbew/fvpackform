@@ -157,8 +157,14 @@ class OrderItemListMethodView(MethodView):
         
         # Data
         data = []
-        for q in queryset:
-            data.append(q.to_dict())
+        start_no = (self.page - 1 * self.per_page)
+        for index, q in enumerate(queryset):
+            data.append(
+                dict(
+                    no=start_no+(index+1), 
+                    row=q.to_dict()
+                    )
+                )
         
         context = dict(
                 links=links,
