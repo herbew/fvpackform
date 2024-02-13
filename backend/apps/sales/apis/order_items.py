@@ -30,32 +30,15 @@ class OrderItemListMethodView(MethodView):
     
     def queryset(self):
         # Get the parameters filter
-        company = str(request.args.get("company") or "")
-        customer = str(request.args.get("customer") or "")
         part = str(request.args.get("part") or "")
         
-        
-        if company:
-            queryset = OrderItem.query.filter(
-                            OrderItem.order.has(
-                                Order.customer.has(
-                                    Customer.company.has(
-                                        Company.name.icontains(company)
-                                    ))))
-        else:
-            queryset = OrderItem.query
-            
-        if customer:
-            queryset = queryset.filter(
-                            OrderItem.order.has(
-                                Order.customer.has(
-                                    Customer.name.icontains(customer)
-                                )))
         if part:
-            queryset = queryset.filter(
+            queryset = OrderItem.query.filter(
                 OrderItem.product.icontains(part)
                 )
-        
+        else:
+            queryset = []
+            
         queryset = queryset.paginate(
                 page=self.page, 
                 per_page=self.per_page,
@@ -66,8 +49,6 @@ class OrderItemListMethodView(MethodView):
     
     def get(self):
         # Filter Parameters
-        company = str(request.args.get("company") or "")
-        customer = str(request.args.get("customer") or "")
         part = str(request.args.get("part") or "")
         
          # Active page
@@ -80,14 +61,6 @@ class OrderItemListMethodView(MethodView):
         filter_by = dict()
         url_base = request.base_url
         params_filter = []
-        
-        if company:
-            filter_by.update(company=company)
-            params_filter.append("company={}".format(company))
-            
-        if customer:
-            filter_by.update(customer=customer)
-            params_filter.append("customer={}".format(customer))
             
         if part:
             filter_by.update(part=part)
@@ -158,6 +131,7 @@ class OrderItemListMethodView(MethodView):
         # Data
         data = []
         start_no = (self.page - 1 ) * self.per_page
+        total_amount = 0
         for index, q in enumerate(queryset):
             data.append(
                 dict(
@@ -165,9 +139,12 @@ class OrderItemListMethodView(MethodView):
                     row=q.to_dict()
                     )
                 )
-        
+            
+            total_amount += q.total_delivered + q.total_amount 
+            
         context = dict(
                 links=links,
+                total_amount=total_amount,
                 data=data,
                 meta=meta
             )

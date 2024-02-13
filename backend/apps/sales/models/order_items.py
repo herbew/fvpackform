@@ -35,8 +35,8 @@ class OrderItem(db.Model, SerializerMixin):
                     'product', 'order_id', 
                     name = 'unique_orderitem_order'),)
     
-    serialize_only = ('id', 'price_per_unit', 'quantity', 'product', 'order','delivered', 'balance')
-    serialize_rules = ('-deliveries.sales_orderitem','delivered', 'balance')
+    serialize_only = ('id', 'price_per_unit', 'quantity', 'product', 'order','total_delivered', 'total_amount')
+    serialize_rules = ('-deliveries.sales_orderitem','total_delivered', 'total_amount')
     
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, 
@@ -76,6 +76,12 @@ class OrderItem(db.Model, SerializerMixin):
     def balance(self):
          # set by sistem
         return self.quantity - self.delivered()
+    
+    def total_delivered(self):
+        return round(float(self.delivered() * float(self.price_per_unit)),2)
+    
+    def total_amount(self):
+        return round(float(self.quantity) * float(self.price_per_unit), 2)
 
     def __init__(self, 
                  order_id, 
