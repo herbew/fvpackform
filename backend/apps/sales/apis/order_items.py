@@ -157,7 +157,7 @@ class OrderItemListMethodView(MethodView):
         
         # Data
         data = []
-        start_no = (self.page - 1 * self.per_page)
+        start_no = (self.page - 1 ) * self.per_page
         for index, q in enumerate(queryset):
             data.append(
                 dict(
