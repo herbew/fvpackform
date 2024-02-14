@@ -5,6 +5,9 @@ import logging
 from flask import (jsonify, json, request)
 from flask.views import MethodView
 
+from sqlalchemy import desc, asc
+
+from backend.run import db
 from backend.apps.masters.models.companies import Company
 from backend.apps.masters.models.customers import Customer
 from backend.apps.sales.models.orders import Order
@@ -30,19 +33,33 @@ class OrderItemListMethodView(MethodView):
     
     def queryset(self):
         # Get the parameters filter
+        is_odesc = bool(request.args.get("odesc")) # Order created date ASC
         part = str(request.args.get("part") or "atamKevinVaniat3hbest")
         
         queryset = OrderItem.query.filter(
                 OrderItem.product.icontains(part)
                 )
         
+        if is_odesc:
+            queryset = (db.session.query(OrderItem).
+                        filter(OrderItem.product.icontains(part)).
+                        join(Order, OrderItem.orderer).
+                        order_by(desc(Order.created_at))
+                        )
+        else:
+            queryset = (db.session.query(OrderItem).
+                        filter(OrderItem.product.icontains(part)).
+                        join(Order, OrderItem.orderer).
+                        order_by(asc(Order.created_at))
+                        )
         return queryset
     
     def get(self):
         # Filter Parameters
+        is_odesc = bool(request.args.get("odesc")) # Order created date ASC
         part = str(request.args.get("part") or "")
         
-         # Active page
+        # Active page
         try:
             self.page = int(request.args.get("page") or 1)
         except:
@@ -142,6 +159,7 @@ class OrderItemListMethodView(MethodView):
             
         
         context = dict(
+                desc_order_created_at='True' if is_odesc else '',
                 total_amount=round(total_amount,3),
                 links=links,
                 data=data,

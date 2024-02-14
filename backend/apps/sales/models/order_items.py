@@ -6,6 +6,7 @@ from datetime import datetime
 from sqlalchemy_serializer import SerializerMixin
 
 from backend.run import db
+from backend.apps.sales.models.orders import Order
 
 from backend.logs import FILE_HANDLER
 
@@ -55,6 +56,15 @@ class OrderItem(db.Model, SerializerMixin):
     
     # Populate relate to field Order.order_items
     order = db.relationship("Order", back_populates="order_items")
+    
+    # for order by Order.created_at
+    orderer = db.relationship(
+        "Order",
+        backref=db.backref(
+            'sales_orderitem',
+            order_by=Order.__table__.columns.created_at
+        )
+    )
     
     # Populate relate to field Delivery.order_item
     deliveries = db.relationship(
