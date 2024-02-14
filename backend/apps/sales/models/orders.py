@@ -92,13 +92,11 @@ class Order(db.Model, SerializerMixin):
         
         dayo = ordinal(self.created_at_local.day)
         
-        dts = datetime.strftime(self.created_at_local,f"%Y %b {dayo}, %I:%M %p")
+        dts = datetime.strftime(
+            self.created_at_local,f"%Y %b {dayo}, %I:%M %p")
         
-        timezone = pytz.timezone(os.environ['TZ']) 
-        dt = timezone.localize(self.created_at_local) 
         
-        return "{} {}".format(dts, dt.tzname())
+        return "{} {}".format(dts, self.created_at_local.tzname())
 
         
-
 
