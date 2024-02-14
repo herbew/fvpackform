@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
-import logging
+import logging, pytz
 from datetime import datetime
 
 from sqlalchemy_serializer import SerializerMixin
@@ -32,7 +32,7 @@ class Order(db.Model, SerializerMixin):
                     'order_name', 'customer_id', 
                     name = 'unique_order_customer'),)
     
-    serialize_only = ('id', 'created_at_local', 'order_name', 'customer')
+    serialize_only = ('id', 'created_at_local', 'created_at_local_str', 'order_name', 'customer')
     serialize_rules = ('-order_items.sales_order',)
     
     id = db.Column(db.Integer, primary_key=True)
@@ -74,12 +74,31 @@ class Order(db.Model, SerializerMixin):
         return '<id: {}, order_name:{} customer_id:{} created_at :{}>'.format(
             self.id, self.order_name, self.customer_id, self.created_at)
     
+    @property
     def created_at_local(self):
         import pytz
         local_string = self.created_at.astimezone(
             pytz.timezone(os.environ['TZ'])).strftime('%Y-%m-%d %H:%M:%S %Z%z')
         local_datetime = datetime.strptime(local_string,'%Y-%m-%d %H:%M:%S %Z%z')
         return local_datetime
+    
+    @property
+    def created_at_local_str(self):
+        def ordinal(n: int) -> str:
+            """
+                derive the ordinal numeral for a given number n
+            """
+            return f"{n:d}{'tsnrhtdd'[(n//10%10!=1)*(n%10<4)*n%10::4]}"
         
+        dayo = ordinal(self.created_at_local.day)
         
+        dts = datetime.strftime(self.created_at_local,f"%Y %b {dayo}, %I:%M %p")
+        
+        timezone = pytz.timezone(os.environ['TZ']) 
+        dt = timezone.localize(self.created_at_local) 
+        
+        return "{} {}".format(dts, dt.tzname())
+
+        
+
 
