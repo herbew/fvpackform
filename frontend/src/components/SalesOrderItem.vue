@@ -4,7 +4,7 @@
           <div class="card-header">
               <nav class="navbar navbar-light bg-light">
                   <div class="container-fluid">
-                      <a class="navbar-brand">Navbar</a>
+                      <a class="navbar-brand"><label>Total Amount : {{ total_amount }}</label> </a>
                       <form class="d-flex">
                           <input v-model="text_part" class="form-control me-2"  type="search" placeholder="Product Name .." aria-label="Search">
                           <button class="btn btn-outline-success" @click="submit" type="button">Search</button>
@@ -41,27 +41,37 @@
                           <td style="text-align: left;">
                               {{ order_item.row.order.created_at_local }}
                           </td>
+                          <td style="text-align: right;">
+                              {{ order_item.row.total_delivered }}
+                          </td>
+                          <td style="text-align: right;">
+                              {{ order_item.row.total_amount }}
+                          </td>
                       </tr>
                   </tbody>
               </table>
               
           </div>
-          <div class="card-footer text-muted">
-              <!-- {{ pagination }} -->
-              <div v-if="count === 0"> <h1>Please insert the Product Name! </h1> </div>
-              <div v-else>
-                <paginate
-                  :page-count="pagination.pages"
-                  :page-range="pagination.per_page"
-                  :margin-pages="pagination.pages"
-                  :click-handler="clickCallback"
-                  :prev-text="'Prev'"
-                  :next-text="'Next'"
-                  :container-class="'pagination'"
-                  :page-class="'page-item'"
-                >
-                </paginate>
-              </div>
+          <div class="col-md-12 card-footer text-muted">
+                <td class="col-md-6" style="text-align: left;">
+                    <label>Total items : <font v-if="pagination">{{ pagination.count }}</font></label>
+                </td>
+                <td class="col-md-6" style="text-align: right;">
+                    <div v-if="count === 0">Please insert the Product Name!</div>
+                    <div v-else>
+                        <paginate
+                        :page-count="pagination.pages"
+                        :page-range="pagination.per_page"
+                        :margin-pages="pagination.pages"
+                        :click-handler="clickCallback"
+                        :prev-text="'Prev'"
+                        :next-text="'Next'"
+                        :container-class="'pagination'"
+                        :page-class="'page-item'"
+                        >
+                        </paginate>
+                    </div>
+                </td>
           </div>
       </div>       
   </div>
@@ -70,7 +80,6 @@
 <script>
   // Pagination
   import Paginate from 'vuejs-paginate-next';
-  // import { ref } from 'vue'
 
   const URL_SALES_ORDER_ITEM  = 'http://192.168.0.144:8181/admin/api/sales/order/item/list/';
   
@@ -78,6 +87,7 @@
       data(){
           return {
               pagination : null,
+              page : 1,
               total_amount : 0,
               count : 0,
               links : null,
@@ -96,7 +106,7 @@
     methods: {
       
       submit() {
-          this.clickCallback(1);
+          this.clickCallback(this.page);
       },
       clickCallback(pageNum){
           
@@ -112,6 +122,7 @@
           .then(data => {
               this.order_items = data.data;
               this.total_amount = data.total_amount;
+              this.page = data.meta.pagination.page;
               this.pagination = {
                   'page':data.meta.pagination.page,
                   'pages':data.meta.pagination.pages,

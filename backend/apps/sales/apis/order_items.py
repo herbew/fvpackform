@@ -36,12 +36,6 @@ class OrderItemListMethodView(MethodView):
                 OrderItem.product.icontains(part)
                 )
         
-        queryset = queryset.paginate(
-                page=self.page, 
-                per_page=self.per_page,
-                error_out=False
-                )
-        
         return queryset
     
     def get(self):
@@ -67,9 +61,26 @@ class OrderItemListMethodView(MethodView):
             meta.update(filter_by=filter_by)
         
         
-         # Get data records
+        # Get data records
         queryset = self.queryset()
         
+        total_amount = 0
+        for index, q in enumerate(queryset):
+            data.append(
+                dict(
+                    no=start_no+(index+1), 
+                    row=q.to_dict()
+                    )
+                )
+            
+            total_amount += q.total_delivered + q.total_amount 
+            
+        # Pagination
+        queryset = queryset.paginate(
+                page=self.page, 
+                per_page=self.per_page,
+                error_out=False
+                )
         
         if params_filter:
             first = "{}?page=1&{}".format(
@@ -128,7 +139,6 @@ class OrderItemListMethodView(MethodView):
         # Data
         data = []
         start_no = (self.page - 1 ) * self.per_page
-        total_amount = 0
         for index, q in enumerate(queryset):
             data.append(
                 dict(
@@ -137,10 +147,9 @@ class OrderItemListMethodView(MethodView):
                     )
                 )
             
-            total_amount += q.total_delivered + q.total_amount 
         
         context = dict(
-                total_amount=total_amount,
+                total_amount=round(total_amount,3),
                 links=links,
                 data=data,
                 meta=meta

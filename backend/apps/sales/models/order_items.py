@@ -80,11 +80,11 @@ class OrderItem(db.Model, SerializerMixin):
     
     @property
     def total_delivered(self):
-        return round(float(self.delivered * float(self.price_per_unit)),2)
+        return round(float(self.delivered * float(self.price_per_unit)),3)
     
     @property
     def total_amount(self):
-        return round(float(self.quantity) * float(self.price_per_unit),2)
+        return round(float(self.quantity) * float(self.price_per_unit),3)
 
     def __init__(self, 
                  order_id, 
