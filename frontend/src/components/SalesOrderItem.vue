@@ -4,11 +4,23 @@
             <div class="card-header">
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand"><label>Total Amount : {{ total_amount }}</label> </a>
-                        <form class="d-flex">
-                            <input v-model="text_part" class="form-control me-2"  type="search" placeholder="Product Name .." aria-label="Search">
-                            <button class="btn btn-outline-success" @click="submit" type="button">Search</button>
-                        </form>
+                        <div class="col-md-3">
+                            <VueDatePicker v-model="start_date" style="margin-right: 2px;"></VueDatePicker>
+                        </div>
+                        <div class="col-md-3">
+                            <VueDatePicker v-model="end_date" style="margin-left: 2px;"></VueDatePicker>
+                        </div>
+                        <div class="col-md-6">
+                            <form class="d-flex" style="margin-left: 5px;">
+                                <input v-model="text_part" class="form-control me-2"  type="search" placeholder="Product Name .." aria-label="Search">
+                                <button class="btn btn-outline-success" @click="submit" type="button">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="col-md-12" style="text-align: left; margin-top: 15px; margin-bottom: -15px;">
+                            <a class="navbar-brand"><label>Total Amount : {{ total_amount }}</label> </a>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -101,7 +113,11 @@
   <script>
     // Pagination
     import Paginate from 'vuejs-paginate-next';
-  
+
+    import VueDatePicker from '@vuepic/vue-datepicker';
+    import '@vuepic/vue-datepicker/dist/main.css'
+
+
     const URL_SALES_ORDER_ITEM  = 'http://192.168.0.144:8181/admin/api/sales/order/item/list/';
     
     export default {
@@ -113,7 +129,9 @@
                 count : 0,
                 links : null,
                 order_items : [],
-                created_at_is_desc:false
+                created_at_is_desc:false,
+                start_date : null,
+                end_date : null
             }
         },
   
@@ -123,7 +141,7 @@
   
       // Paginate
       components: {
-        paginate: Paginate,
+        paginate: Paginate,VueDatePicker
       },
       methods: {
         created_at_asc(){
