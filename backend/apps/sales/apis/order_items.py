@@ -65,14 +65,7 @@ class OrderItemListMethodView(MethodView):
         queryset = self.queryset()
         
         total_amount = 0
-        for index, q in enumerate(queryset):
-            data.append(
-                dict(
-                    no=start_no+(index+1), 
-                    row=q.to_dict()
-                    )
-                )
-            
+        for  q in queryset:
             total_amount += q.total_delivered + q.total_amount 
             
         # Pagination
