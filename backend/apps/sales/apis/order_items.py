@@ -30,15 +30,12 @@ class OrderItemListMethodView(MethodView):
     
     def queryset(self):
         # Get the parameters filter
-        part = str(request.args.get("part") or "")
+        part = str(request.args.get("part") or "atamKevinVaniat3hbest")
         
-        if part:
-            queryset = OrderItem.query.filter(
+        queryset = OrderItem.query.filter(
                 OrderItem.product.icontains(part)
                 )
-        else:
-            queryset = []
-            
+        
         queryset = queryset.paginate(
                 page=self.page, 
                 per_page=self.per_page,
@@ -61,7 +58,7 @@ class OrderItemListMethodView(MethodView):
         filter_by = dict()
         url_base = request.base_url
         params_filter = []
-            
+        
         if part:
             filter_by.update(part=part)
             params_filter.append("part={}".format(part))
@@ -141,10 +138,10 @@ class OrderItemListMethodView(MethodView):
                 )
             
             total_amount += q.total_delivered + q.total_amount 
-            
+        
         context = dict(
-                links=links,
                 total_amount=total_amount,
+                links=links,
                 data=data,
                 meta=meta
             )

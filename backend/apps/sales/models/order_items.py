@@ -64,7 +64,7 @@ class OrderItem(db.Model, SerializerMixin):
                 passive_deletes=True,
                 lazy="select"
             )
-    
+    @property
     def delivered(self):
         from backend.apps.stocks.models.deliveries import Delivery
         delivered = 0
@@ -73,15 +73,18 @@ class OrderItem(db.Model, SerializerMixin):
         
         return delivered
     
+    @property
     def balance(self):
          # set by sistem
-        return self.quantity - self.delivered()
+        return self.quantity - self.delivered
     
+    @property
     def total_delivered(self):
-        return round(float(self.delivered() * float(self.price_per_unit)),2)
+        return round(float(self.delivered * float(self.price_per_unit)),2)
     
+    @property
     def total_amount(self):
-        return round(float(self.quantity) * float(self.price_per_unit), 2)
+        return round(float(self.quantity) * float(self.price_per_unit),2)
 
     def __init__(self, 
                  order_id, 
@@ -101,5 +104,4 @@ class OrderItem(db.Model, SerializerMixin):
             self.quantity, self.product)
     
     
-
 
