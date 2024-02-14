@@ -39,9 +39,13 @@
                                 {{ order_item.customer }}
                             </td>
                             <td v-if="order_item.order_date===null" style="text-align: right;">
+                                <small v-if="created_at_is_desc===''">
+                                    Ascending Ordered
+                                </small>
+                                <small v-else> Descending Ordered </small> &nbsp;
                                 <div class="btn-group">
                                     <div class="btn-group dropup">
-                                        <button type="button" 
+                                        <button type="button" @click="created_at_asc"
                                             class="btn btn-secondary dropdown-toggle" 
                                             aria-expanded="false"
                                             title="Ascending order by Order Date">
@@ -49,7 +53,7 @@
                                     </div>
                                     <button 
                                         class="btn btn-light dropdown-toggle" 
-                                        type="button" id="dropdownMenuButton" 
+                                        type="button" @click="created_at_desc" 
                                         aria-expanded="false"
                                         title="Descending order by Order Date">
                                     </button>
@@ -108,7 +112,8 @@
                 total_amount : 0,
                 count : 0,
                 links : null,
-                order_items : []
+                order_items : [],
+                created_at_is_desc:false
             }
         },
   
@@ -121,13 +126,20 @@
         paginate: Paginate,
       },
       methods: {
-        
+        created_at_asc(){
+            this.reated_at_is_desc = "";
+            this.clickCallback(this.page);
+        },
+        created_at_desc(){
+            this.reated_at_is_desc = "True";
+            this.clickCallback(this.page);
+        },
         submit() {
             this.clickCallback(this.page);
         },
         clickCallback(pageNum){
             
-            fetch(URL_SALES_ORDER_ITEM+"?page="+pageNum+"&part="+this.text_part,
+            fetch(URL_SALES_ORDER_ITEM+"?page="+pageNum+"&part="+this.text_part+"&odesc="+this.reated_at_is_desc,
                 {
                     method: "GET",
                     headers: {
@@ -173,7 +185,7 @@
                     'count':data.meta.pagination.count,
                     'per_page':data.meta.pagination.last,
                 };
-                
+                this.created_at_is_desc = data.desc_order_created_at;
                 this.count = data.meta.pagination.count;
             })
             .catch(err => console.log(err.message))
