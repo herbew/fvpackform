@@ -5,10 +5,18 @@
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
                         <div class="col-md-3">
-                            <VueDatePicker v-model="start_date" style="margin-right: 2px;"></VueDatePicker>
+                            <VueDatePicker 
+                                v-model="start_date" 
+                                @open="start_date_init"
+                                style="margin-right: 2px;">
+                            </VueDatePicker>
                         </div>
                         <div class="col-md-3">
-                            <VueDatePicker v-model="end_date" style="margin-left: 2px;"></VueDatePicker>
+                            <VueDatePicker 
+                                v-model="end_date" 
+                                @open="end_date_init"
+                                style="margin-left: 2px;">
+                            </VueDatePicker>
                         </div>
                         <div class="col-md-6">
                             <form class="d-flex" style="margin-left: 5px;">
@@ -85,11 +93,13 @@
                 </table>
                 
             </div>
-            <div class="col-md-12 card-footer text-muted">
-                  <td class="col-md-6" style="text-align: left;">
-                      <label>Total items : <font v-if="pagination">{{ pagination.count }}</font></label>
+            <div class="col-12 card-footer text-muted">
+                  <td class="col-8" style="text-align: left;">
+                      <label>
+                            Total items : <font v-if="pagination">{{ pagination.count }}</font>, <small> {{ today_date }}</small>
+                      </label>
                   </td>
-                  <td class="col-md-6" style="text-align: right;">
+                  <td  style="text-align: right;">
                       <div v-if="count === 0">Please insert the Product Name!</div>
                       <div v-else>
                           <paginate
@@ -113,12 +123,14 @@
   <script>
     // Pagination
     import Paginate from 'vuejs-paginate-next';
-
+    
     import VueDatePicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
 
 
-    const URL_SALES_ORDER_ITEM  = 'http://192.168.0.144:8181/admin/api/sales/order/item/list/';
+    import moment from 'moment'
+
+    const URL_SALES_ORDER_ITEM  = process.env.VUE_APP_APIURL_SALES_ORDER_ITEM; 
     
     export default {
         data(){
@@ -131,7 +143,9 @@
                 order_items : [],
                 created_at_is_desc:false,
                 start_date : null,
-                end_date : null
+                end_date : null,
+                today_date: moment().local(true).format('MMMM Do YYYY, h:mm:ss a'),
+                  
             }
         },
   
@@ -144,6 +158,12 @@
         paginate: Paginate,VueDatePicker
       },
       methods: {
+        start_date_init(){
+            this.start_date = moment().local(true)
+        },
+        end_date_init(){
+            this.end_date = moment().local(true)
+        },
         created_at_asc(){
             if (this.reated_at_is_desc == ""){
                 return
@@ -222,16 +242,6 @@
     };
   </script>
   
-  <style lang="css">
-    /* Adopt bootstrap pagination stylesheet. */
-    @import "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css";
-  
-    /* Write your own CSS for pagination */
-    .pagination {
-    }
-    .page-item {
-    }
-  </style>
   
   
   
