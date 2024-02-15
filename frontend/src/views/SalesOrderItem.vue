@@ -145,10 +145,16 @@
       },
       methods: {
         created_at_asc(){
+            if (this.reated_at_is_desc == ""){
+                return
+            }
             this.reated_at_is_desc = "";
             this.clickCallback(this.page);
         },
         created_at_desc(){
+            if (this.reated_at_is_desc != ""){
+                return
+            }
             this.reated_at_is_desc = "True";
             this.clickCallback(this.page);
         },

@@ -1,19 +1,17 @@
 <template>
-  <!--<img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>-->
-  <SalesOrderItem/>
+    <div class="container">
+      <nav>
+          <router-link to="/">Home</router-link> &nbsp;
+          <router-link to="/order/">Sales Order</router-link>
+      </nav>
+      <router-view></router-view>
+    </div>
 </template>
 
 <script>
-//import HelloWorld from './components/HelloWorld.vue'
-import SalesOrderItem from './components/SalesOrderItem.vue';
-export default {
-  name: 'App',
-  components: {
-    //HelloWorld
-    SalesOrderItem
+  export default {
+    name: 'App',
   }
-}
 </script>
 
 <style>
