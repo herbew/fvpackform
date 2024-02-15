@@ -114,6 +114,16 @@ npm install -g @vue/cli
 ```
 cd ../frontend
 ```
+Update the .env variable 
+```
+vi .env
+VUE_APP_APIURL_SALES_ORDER_ITEM=http://<IP>:<PORT>/admin/api/sales/order/item/list/
+
+```
+IP = The IP of backend service run
+PORT = The PORT of backend service run
+
+
 ```
 npm install
 ```
