@@ -105,17 +105,17 @@
                         <lable v-else>Please insert the Product Name!</lable>
                       </div>
                       <div v-else>
-                          <paginate
+                          <Paginate
                           :page-count="pagination.pages"
                           :page-range="pagination.per_page"
                           :margin-pages="pagination.pages"
-                          :click-handler="clickCallback"
+                          :click-handler="init_data_api"
                           :prev-text="'Prev'"
                           :next-text="'Next'"
                           :container-class="'pagination'"
                           :page-class="'page-item'"
                           >
-                          </paginate>
+                          </Paginate>
                       </div>
                   </td>
             </div>
@@ -129,22 +129,25 @@
     
     // DatePicker
     import VueDatePicker from '@vuepic/vue-datepicker';
-    import '@vuepic/vue-datepicker/dist/main.css'
+    // import '@vuepic/vue-datepicker/dist/main.css';
 
     // moment for datetime processing
-    import moment from 'moment'
+    import moment from 'moment';
+
+    // fetch api
+    import fetch from "cross-fetch";
 
     // default url api for env
     const URL_SALES_ORDER_ITEM  = process.env.VUE_APP_APIURL_SALES_ORDER_ITEM; 
     
     export default {
+        name:'SalesOrderItem',
         data(){
             return {
                 pagination : null,
                 page : 1,
                 total_amount : 0,
                 count : 0,
-                links : null,
                 order_items : [],
                 created_at_is_desc:false,
                 start_date : null,
@@ -154,157 +157,159 @@
                 err_api: null        
             }
         },
-  
-      async mounted(){
+        
+        async mounted(){
             // mounted the raw data
-            this.clickCallback();
-      },
+            this.init_data_api();
+        },
   
-      // export components : Paginate, VueDatePicker
-      components: {
-        paginate: Paginate, VueDatePicker
-      },
-
-      methods: {
-        start_date_init(){
-            // Intialize the start_date DatePicker, as local date(AEDT base env)
-            this.start_date = moment().local(true)
+        // export components : Paginate, VueDatePicker
+        components: {
+            Paginate, VueDatePicker
         },
 
-        end_date_init(){
-            // Intialize the end_date DatePicker, as local date(AEDT base env)
-            this.end_date = moment().local(true)
-        },
+        methods: {
+            start_date_init(){
+                // Intialize the start_date DatePicker, as local date(AEDT base env)
+                this.start_date = moment().local(true)
+            },
 
-        created_at_asc(){
-            // Ordering ASC base created_at field
-            if (this.reated_at_is_desc == ""){
-                return
-            }
-            this.reated_at_is_desc = "";
-            this.clickCallback(this.page);
-        },
+            end_date_init(){
+                // Intialize the end_date DatePicker, as local date(AEDT base env)
+                this.end_date = moment().local(true)
+            },
 
-        created_at_desc(){
-            // Ordering DESC base created_at field
-            if (this.reated_at_is_desc != ""){
-                return
-            }
-            this.reated_at_is_desc = "True";
-            this.clickCallback(this.page);
-        },
-
-        submit() {
-            // Submit, Check if any filter start_date or end_date
-            if(this.start_date && this.end_date){
-                if(this.start_date > this.end_date){
-                    alert('The start date must be less than the end date!');
-                    this.start_date = null;
-                    this.end_date = null;
+            created_at_asc(){
+                // Ordering ASC base created_at field
+                if (this.reated_at_is_desc == ""){
                     return
                 }
-            }
-            // Call fetch url data
-            this.pagination = {
-                    'page':1,
-                    'pages':1,
-                    'count':0,
-                    'per_page':0,
-                };
-            this.page = 1
-            this.clickCallback(this.page);
-        },
-        clickCallback(pageNum){
-            // Initial url
-            let so_url = URL_SALES_ORDER_ITEM+"?page="+pageNum;
-            
-            // Add the param filter 'odesc' for DESC order
-            if(this.reated_at_is_desc){
-                so_url = so_url+"&odesc="+this.reated_at_is_desc
-            }
+                this.reated_at_is_desc = "";
+                this.init_data_api(this.page);
+            },
 
-            // Add the param filter 'part' 
-            if(this.text_part){
-                so_url = so_url+"&part="+this.text_part
-            }
-            
-            // Add the param filter 'sdt', start date created_at
-            if (this.start_date){
-                let str_start_date = moment(this.start_date).format("YYYY-MM-DDThh:mm:ss") + "Z"
-                so_url = so_url+"&sdt="+str_start_date
-            }
-            
-            // Add the param filter 'edt', end date created_at
-            if (this.end_date){
-                let str_end_date = moment(this.end_date).format("YYYY-MM-DDThh:mm:ss") + "Z"
-                so_url = so_url+"&edt="+str_end_date
-            }
-            console.log(so_url)
-            
+            created_at_desc(){
+                // Ordering DESC base created_at field
+                if (this.reated_at_is_desc != ""){
+                    return
+                }
+                this.reated_at_is_desc = "True";
+                this.init_data_api(this.page);
+            },
 
-            fetch(so_url,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-type": "application/json;charset=UTF-8",
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                })
-            .then(res => res.json())
-            .then(data => {
-                this.order_items = [
-                    {
-                        'no':null,
-                        'order_name':null,
-                        'product':null,
-                        'company':null,
-                        'customer':null,
-                        'order_date':null,
-                        'delivered_amount':null,
-                        'total_amount':null
-                    }
-                ]
-
-                data.data.forEach((item) => {
-                    let d =  {
-                        'no':item.no,
-                        'order_name':item.row.order.order_name,
-                        'product':item.row.product,
-                        'company':item.row.order.customer.company.name,
-                        'customer':item.row.order.customer.name,
-                        'order_date':item.row.order.created_at_local_str,
-                        'delivered_amount':item.row.total_delivered,
-                        'total_amount':item.row.total_amount
-                    }
-                    this.order_items.push(d)
-                    //console.log(d)
-                    //console.log(index)
-                })
-                this.total_amount = data.total_amount;
-                this.page = data.meta.pagination.page;
+            submit() {
+                // Submit, Check if any filter start_date or end_date
+                if(this.start_date && this.end_date){
+                    if(this.start_date > this.end_date){
+                        alert('The start date must be less than the end date!');
+                        this.start_date = null;
+                        this.end_date = null;
+                        return
+                    }   
+                }
+                
+                // Call fetch url data
                 this.pagination = {
-                    'page':data.meta.pagination.page,
-                    'pages':data.meta.pagination.pages,
-                    'count':data.meta.pagination.count,
-                    'per_page':data.meta.pagination.last,
-                };
-                this.created_at_is_desc = data.desc_order_created_at;
-                this.count = data.meta.pagination.count;
-                this.err_api = null;
-            })
-            .catch(err => {
-                this.count = 0;
-                this.order_items = [];
-                this.err_api = 'Any Error with REST API Item Order';
-                this.total_amount = 0;
-                this.page = 0;
-                console.log(err.message);
+                        'page':1,
+                        'pages':1,
+                        'count':0,
+                        'per_page':0,
+                    };
+                this.page = 1
+                this.init_data_api(this.page);
+            },
+
+            init_data_api(page_no){
+                // Initial url
+                let so_url = URL_SALES_ORDER_ITEM+"?page="+page_no;
+            
+                // Add the param filter 'odesc' for DESC order
+                if(this.reated_at_is_desc){
+                    so_url = so_url+"&odesc="+this.reated_at_is_desc
+                }
+
+                // Add the param filter 'part' 
+                if(this.text_part){
+                    so_url = so_url+"&part="+this.text_part
+                }
+                
+                // Add the param filter 'sdt', start date created_at
+                if (this.start_date){
+                    let str_start_date = moment(this.start_date).format("YYYY-MM-DDThh:mm:ss") + "Z"
+                    so_url = so_url+"&sdt="+str_start_date
+                }
+                
+                // Add the param filter 'edt', end date created_at
+                if (this.end_date){
+                    let str_end_date = moment(this.end_date).format("YYYY-MM-DDThh:mm:ss") + "Z"
+                    so_url = so_url+"&edt="+str_end_date
+                }
+                console.log(so_url)
+                
+
+                fetch(so_url,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-type": "application/json;charset=UTF-8",
+                            "Access-Control-Allow-Origin": "*"
+                        }
+                    })
+                .then(res => res.json())
+                .then(data => {
+                    this.order_items = [
+                        {
+                            'no':null,
+                            'order_name':null,
+                            'product':null,
+                            'company':null,
+                            'customer':null,
+                            'order_date':null,
+                            'delivered_amount':null,
+                            'total_amount':null
+                        }
+                    ]
+
+                    data.data.forEach((item) => {
+                        let d =  {
+                            'no':item.no,
+                            'order_name':item.row.order.order_name,
+                            'product':item.row.product,
+                            'company':item.row.order.customer.company.name,
+                            'customer':item.row.order.customer.name,
+                            'order_date':item.row.order.created_at_local_str,
+                            'delivered_amount':item.row.total_delivered,
+                            'total_amount':item.row.total_amount
+                        }
+                        this.order_items.push(d)
+                        //console.log(d)
+                        //console.log(index)
+                    })
+                    this.total_amount = data.total_amount;
+                    this.page = data.meta.pagination.page;
+                    this.pagination = {
+                        'page':data.meta.pagination.page,
+                        'pages':data.meta.pagination.pages,
+                        'count':data.meta.pagination.count,
+                        'per_page':data.meta.pagination.last,
+                    };
+                    this.created_at_is_desc = data.desc_order_created_at;
+                    this.count = data.meta.pagination.count;
+                    this.err_api = null;
+                })
+                .catch(err => {
+                    this.count = 0;
+                    this.order_items = [];
+                    this.err_api = 'Any Error with REST API Item Order';
+                    this.total_amount = 0;
+                    this.page = 0;
+                    console.log(err.message);
+                }
+                )
+                //console.log(URL_SALES_ORDER_ITEM+"?page="+page_no+"&part="+this.text_part);
+                //console.log(this.order_items)
+                //console.log(this.text_part)
             }
-            )
-            //console.log(URL_SALES_ORDER_ITEM+"?page="+pageNum+"&part="+this.text_part);
-            //console.log(this.order_items)
-            //console.log(this.text_part)
-        }
       },
       
     };
