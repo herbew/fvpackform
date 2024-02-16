@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
-import logging
+import logging, pytz
 
 from flask import (jsonify, json, request)
 from flask.views import MethodView
@@ -15,12 +15,15 @@ from backend.apps.sales.models.order_items import OrderItem
 
 
 from backend.logs import FILE_HANDLER
+from _datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
 log = logging.getLogger(__file__)
 file_handler = FILE_HANDLER
 log.addHandler(file_handler)
+
+FORMAT_DATETIME = "%Y-%m-%dT%H:%M:%SZ" 
 
 class OrderItemListMethodView(MethodView):
     """
@@ -32,26 +35,54 @@ class OrderItemListMethodView(MethodView):
     
     
     def queryset(self):
+        def convert_utc(pdate):
+            # Convert to UTC
+            print("pDate {}".format(pdate))
+            local_date = datetime.strptime(pdate, FORMAT_DATETIME)
+            utc_string = local_date.astimezone(
+                pytz.timezone('UTC')).strftime('%Y-%m-%d %H:%M:%S %Z%z')
+            return datetime.strptime(utc_string,'%Y-%m-%d %H:%M:%S %Z%z')
+                
         # Get the parameters filter
         is_odesc = bool(request.args.get("odesc")) # Order created date ASC
-        part = str(request.args.get("part") or "atamKevinVaniat3hbest")
+        part = str(request.args.get("part") or "")
+        start_date = str(request.args.get("sdt") or "")
+        end_date = str(request.args.get("edt") or "")
         
-        queryset = OrderItem.query.filter(
-                OrderItem.product.icontains(part)
-                )
+        print("Start Date {}".format(start_date))
+        print("End Date {}".format(end_date))
         
         if is_odesc:
             queryset = (db.session.query(OrderItem).
-                        filter(OrderItem.product.icontains(part)).
                         join(Order, OrderItem.orderer).
                         order_by(desc(Order.created_at))
                         )
         else:
             queryset = (db.session.query(OrderItem).
-                        filter(OrderItem.product.icontains(part)).
                         join(Order, OrderItem.orderer).
                         order_by(asc(Order.created_at))
                         )
+        
+        if part:
+            queryset = queryset.filter(
+                OrderItem.product.icontains(part)
+                )
+            
+        if start_date and end_date:
+            queryset = queryset.join(Order, OrderItem.orderer).filter(
+                Order.created_at.between(convert_utc(start_date), convert_utc(end_date))
+                )
+            
+        if start_date:
+            queryset = queryset.join(Order, OrderItem.orderer).filter(
+                Order.created_at >= convert_utc(start_date)
+                )
+        
+        if end_date:
+            queryset = queryset.join(Order, OrderItem.orderer).filter(
+                Order.created_at <= convert_utc(end_date)
+                )
+        
         return queryset
     
     def get(self):
