@@ -15,7 +15,7 @@ from backend.apps.sales.models.order_items import OrderItem
 
 
 from backend.logs import FILE_HANDLER
-from _datetime import datetime
+from _datetime import datetime, timedelta
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -37,7 +37,7 @@ class OrderItemListMethodView(MethodView):
     def queryset(self):
         def convert_utc(pdate):
             # Convert to UTC
-            print("pDate {}".format(pdate))
+            # print("pDate {}".format(pdate))
             local_date = datetime.strptime(pdate, FORMAT_DATETIME)
             utc_string = local_date.astimezone(
                 pytz.timezone('UTC')).strftime('%Y-%m-%d %H:%M:%S %Z%z')
@@ -49,8 +49,8 @@ class OrderItemListMethodView(MethodView):
         start_date = str(request.args.get("sdt") or "")
         end_date = str(request.args.get("edt") or "")
         
-        print("Start Date {}".format(start_date))
-        print("End Date {}".format(end_date))
+        # print("Start Date {}".format(start_date))
+        # print("End Date {}".format(end_date))
         
         if is_odesc:
             queryset = (db.session.query(OrderItem).
@@ -70,7 +70,9 @@ class OrderItemListMethodView(MethodView):
             
         if start_date and end_date:
             queryset = queryset.join(Order, OrderItem.orderer).filter(
-                Order.created_at.between(convert_utc(start_date), convert_utc(end_date))
+                Order.created_at.between(
+                    convert_utc(start_date)-timedelta(days=1), 
+                    convert_utc(end_date)+timedelta(days=1))
                 )
             
         if start_date:
