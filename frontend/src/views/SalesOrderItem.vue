@@ -300,10 +300,10 @@
                 .catch(err => {
                     this.count = 0;
                     this.order_items = [];
-                    this.err_api = 'Any Error with REST API Item Order';
+                    this.err_api = err.message;
                     this.total_amount = 0;
                     this.page = 0;
-                    console.log(err.message);
+                    // console.log(err.message);
                 }
                 )
                 //console.log(URL_SALES_ORDER_ITEM+"?page="+page_no+"&part="+this.text_part);
