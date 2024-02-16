@@ -11,6 +11,8 @@ sudo apt install postgresql postgresql-contrib
 Database
 ```
 sudo -u postgres psql -c "CREATE USER ufvpackform WITH ENCRYPTED PASSWORD 'PwDfvpackformSatu1Dua3';"
+```
+```
 sudo -u postgres psql -c "CREATE DATABASE db_fvpackform;"
 sudo -u postgres psql db_fvpackform -c "GRANT ALL PRIVILEGES ON DATABASE db_fvpackform TO ufvpackform;"
 sudo -u postgres psql db_fvpackform -c "GRANT ALL ON SCHEMA public TO ufvpackform;"
@@ -21,6 +23,8 @@ sudo -u postgres psql db_fvpackform -c "GRANT ALL ON ALL FUNCTIONS IN SCHEMA pub
 Database Test
 ```
 sudo -u postgres psql -c "CREATE USER ufvpackformtest WITH ENCRYPTED PASSWORD 'PwDfvpackformtestSatu1Dua3';"
+```
+```
 sudo -u postgres psql -c "CREATE DATABASE db_fvpackformtest;"
 sudo -u postgres psql db_fvpackformtest -c "GRANT ALL PRIVILEGES ON DATABASE db_fvpackformtest TO ufvpackformtest;"
 sudo -u postgres psql db_fvpackformtest -c "GRANT ALL ON SCHEMA public TO ufvpackformtest;"
@@ -117,15 +121,19 @@ cd ../frontend
 Update the .env variable 
 ```
 vi .env
+```
+```
 VUE_APP_APIURL_SALES_ORDER_ITEM=http://<IP>:<PORT>/admin/api/sales/order/item/list/
 
 ```
-IP = The IP of backend service run
+IP = The IP of backend service run</br>
 PORT = The PORT of backend service run
-
 
 ```
 npm install
+```
+```
+npm run test:unit
 ```
 ```
 npm run serve

@@ -1,42 +1,41 @@
 <template>
   <div class="hello">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <div class="container">
-      <tr>
-        <div class="col-12">
-          <h1>Welcome to Sales Order Service</h1>
-        </div>
-        
-      </tr>
-      <tr>
-          <table>
-            <div class="col-12">
-              <td class="col-4"></td>
-              <td class="col-6" style="text-align: left;">
-                <p>
-                  This service for helping Staff to check their Customer.<br>
-                  Follow the SOP as:<br>
-                  - Enter the <b>Product Name</b> then klik Search button.<br>
-                  - Klik <b>Start date</b> and or <b>End date</b> for filtering created date of order.<br>      
-                  - Klik the pagination button, if you will see the other page.<br>
-                  - Don't forget, you enable <b>order</b> the data by a created date or order
-                </p>
-                <p>
-                  Best Regard,<br>
-                  Heribertus Rustyawan
-                </p>
-              </td>
-              <td class="col-2"></td>
-          </div>
-        </table>
-      </tr>
-    </div>
+    <h1>{{ msg }}</h1>
+    <p>
+      For a guide and recipes on how to configure / customize this project,<br>
+      check out the
+      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+    </p>
+    <h3>Installed CLI Plugins</h3>
+    <ul>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
+      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
+    </ul>
+    <h3>Essential Links</h3>
+    <ul>
+      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
+      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
+      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
+      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
+      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
+    </ul>
+    <h3>Ecosystem</h3>
+    <ul>
+      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
+      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
+      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
+      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
+      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld'
+  name: 'HelloWorld',
+  props: {
+    msg: String
+  }
 }
 </script>
 
