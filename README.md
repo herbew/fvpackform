@@ -117,10 +117,11 @@ cd ../frontend
 Update the .env variable 
 ```
 vi .env
-VUE_APP_APIURL_SALES_ORDER_ITEM=http://<IP>:<PORT>/admin/api/sales/order/item/list/
-
 ```
-IP = The IP of backend service run
+```
+VUE_APP_APIURL_SALES_ORDER_ITEM=http://<IP>:<PORT>/admin/api/sales/order/item/list/
+```
+IP = The IP of backend service run</br>
 PORT = The PORT of backend service run
 
 
