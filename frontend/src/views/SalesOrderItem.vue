@@ -205,6 +205,13 @@
                 }
             }
             // Call fetch url data
+            this.pagination = {
+                    'page':1,
+                    'pages':1,
+                    'count':0,
+                    'per_page':0,
+                };
+            this.page = 1
             this.clickCallback(this.page);
         },
         clickCallback(pageNum){
