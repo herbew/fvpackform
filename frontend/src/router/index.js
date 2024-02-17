@@ -9,7 +9,7 @@ const routes = [
         component: Welcome
     },
     {
-        path:'/order/',
+        path:'/orders',
         name:'sales_order',
         component:SalesOrderItem
     }
