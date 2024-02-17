@@ -116,8 +116,10 @@ class OrderItemListMethodView(MethodView):
         
         total_amount = 0
         for  q in queryset:
-            total_amount += q.total_delivered + q.total_amount 
-            
+            if q.total_delivered in ('-', None):
+                total_amount += q.total_delivered + q.total_amount
+            else:
+                total_amount += q.total_amount
         # Pagination
         queryset = queryset.paginate(
                 page=self.page, 
