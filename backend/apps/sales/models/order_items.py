@@ -90,6 +90,8 @@ class OrderItem(db.Model, SerializerMixin):
     
     @property
     def total_delivered(self):
+        if self.delivered <= 0:
+            return '-'
         return round(float(self.delivered * float(self.price_per_unit)),3)
     
     @property
