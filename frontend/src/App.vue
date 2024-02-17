@@ -2,7 +2,7 @@
     <div class="container">
       <nav>
           <router-link to="/">Home</router-link> &nbsp;
-          <router-link to="/order/">Sales Order</router-link>
+          <router-link to="/orders">Sales Order</router-link>
       </nav>
       <router-view></router-view>
     </div>
